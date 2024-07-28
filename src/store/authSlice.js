@@ -5,12 +5,18 @@ import { generateSessionId, clearSession } from "../components/sessionHandler";
 const initialState = {
   isAuthenticated: false,
   token: null,
+  user: null,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    signup: (state, action) => {
+      const user = action.payload;
+      state.user = user;
+      localStorage.setItem("user", JSON.stringify(user));
+    },
     login: (state) => {
       const token = uuidv4();
       state.isAuthenticated = true;
@@ -18,7 +24,6 @@ const authSlice = createSlice({
       localStorage.setItem("token", token);
       generateSessionId();
 
-      // Set token expiration (5 minutes)
       setTimeout(() => {
         state.isAuthenticated = false;
         state.token = null;
@@ -29,12 +34,14 @@ const authSlice = createSlice({
     logout: (state) => {
       state.isAuthenticated = false;
       state.token = null;
+      state.user = null;
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
       clearSession();
     },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { signup, login, logout } = authSlice.actions;
 
 export default authSlice.reducer;

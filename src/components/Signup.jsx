@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import validator from 'validator';
+import validator from "validator";
+import { useDispatch } from "react-redux";
+import { signup } from "../store/authSlice";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -9,22 +11,23 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validator.isEmail(email)) {
-      setError('Invalid email address');
+      setError("Invalid email address");
       return;
     }
     if (!name || !gender) {
-      setError('Please fill in all fields');
+      setError("Please fill in all fields");
       return;
     }
-    // Store the user details in localStorage
-    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const users = JSON.parse(localStorage.getItem("users")) || [];
     users.push({ name, gender, email, password });
-    localStorage.setItem('users', JSON.stringify(users));
-    navigate('/login');
+    dispatch(signup(users));
+    localStorage.setItem("users", JSON.stringify(users));
+    navigate("/login");
   };
 
   return (
@@ -55,7 +58,9 @@ const Signup = () => {
               onChange={(e) => setGender(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded"
             >
-              <option value="" disabled>Select Gender</option>
+              <option value="" disabled>
+                Select Gender
+              </option>
               <option value="male">Male</option>
               <option value="female">Female</option>
               <option value="other">Other</option>
@@ -96,7 +101,10 @@ const Signup = () => {
           {error && <p className="text-red-500 mt-4">{error}</p>}
         </form>
         <p className="mt-4 text-center">
-          Have an account? <Link to="/login" className="text-blue-500 hover:underline">Login</Link>
+          Have an account?{" "}
+          <Link to="/login" className="text-blue-500 hover:underline">
+            Login
+          </Link>
         </p>
       </div>
     </div>

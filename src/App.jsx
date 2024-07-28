@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Login, Signup, Home, About, Profile } from "./components";
 import { login, logout } from "./store/authSlice";
@@ -57,7 +62,10 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/about" element={<PrivateRoute element={<About />} />} />
-        <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
+        <Route
+          path="/profile"
+          element={<PrivateRoute element={<Profile />} />}
+        />
         <Route path="/home" element={<PrivateRoute element={<Home />} />} />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
